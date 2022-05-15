@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type AomineCollector struct {
@@ -22,13 +21,6 @@ type AomineCollector struct {
 }
 
 func NewCollector(searchUrl string, offset int, limit int) *AomineCollector {
-	col := colly.NewCollector(colly.AllowedDomains("archiveofourown.org"))
-	col.AllowURLRevisit = true
-
-	col.Limit(&colly.LimitRule{
-		Delay: time.Second * 5,
-	})
-
 	parsedUrl, err := url.Parse(searchUrl)
 
 	if err != nil {
@@ -49,7 +41,7 @@ func NewCollector(searchUrl string, offset int, limit int) *AomineCollector {
 		Offset: offset,
 		Limit:  limit,
 		Page:   page,
-		col:    col,
+		col:    BaseColly(),
 	}
 }
 
