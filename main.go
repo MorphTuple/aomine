@@ -23,7 +23,7 @@ func main() {
 	ctx := kong.Parse(&args)
 
 	switch ctx.Command() {
-	case "collect <url>":
+	case "collect <url>", "collect <url> <filepath>":
 		collector := NewCollector(args.Collect.Url, args.Collect.Offset, args.Collect.Limit)
 		collector.Start()
 

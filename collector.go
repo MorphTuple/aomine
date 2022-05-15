@@ -14,6 +14,7 @@ type AomineCollector struct {
 	Offset int
 	Limit  int
 	Page   int
+	Passed int
 	Peaked bool
 
 	col       *colly.Collector
@@ -67,6 +68,13 @@ func (c *AomineCollector) Start() {
 			}
 
 			returnedCount++
+
+			if c.Passed < c.Offset {
+				fmt.Println("Skipping...")
+				c.Passed++
+				return true
+			}
+
 			s, _ := articleEl.DOM.Attr("id")
 			c.Collected = append(c.Collected, s[5:])
 			fmt.Printf("#%d %s\n", len(c.Collected), s[5:])
