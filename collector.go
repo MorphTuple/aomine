@@ -69,8 +69,7 @@ func (c *AomineCollector) Start() {
 		var returnedCount int
 
 		el.ForEachWithBreak("[role=\"article\"]", func(i int, articleEl *colly.HTMLElement) bool {
-			if len(c.Collected) > c.Limit {
-				fmt.Println("Reached limit!")
+			if len(c.Collected) >= c.Limit {
 				c.Peaked = true
 				return false
 			}
@@ -78,7 +77,7 @@ func (c *AomineCollector) Start() {
 			returnedCount++
 			s, _ := articleEl.DOM.Attr("id")
 			c.Collected = append(c.Collected, s[5:])
-			fmt.Println(s[5:])
+			fmt.Printf("#%d %s\n", len(c.Collected), s[5:])
 
 			return true
 		})
@@ -92,7 +91,7 @@ func (c *AomineCollector) Start() {
 	fmt.Printf("Fetching Page %d\n", c.Page)
 	c.col.Visit(c.getUrl())
 
-	for !c.Peaked && len(c.Collected) <= c.Limit {
+	for !c.Peaked && len(c.Collected) < c.Limit {
 		c.Page++
 		fmt.Printf("Fetching Page %d\n", c.Page)
 		c.col.Visit(c.getUrl())
